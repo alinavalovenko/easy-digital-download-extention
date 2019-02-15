@@ -15,6 +15,8 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 		define( 'ROOT_UPLOAD_FOLDER', wp_get_upload_dir()['basedir'] );
 	}
 
+	include_once 'include/class-import-from-uploads.php';
+
 	class Easy_Digital_Download_Extension {
 
 		public function __construct() {
@@ -24,6 +26,7 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 			add_action( 'admin_menu', array( $this, 'edde_add_admin_page' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'edde_enqueue_scripts' ) );
 			add_action( 'wp_ajax_get_folders_list', array( $this, 'get_folders_list_ajax' ) );
+			add_action( 'wp_ajax_save_items_as_downloads', array( $this, 'save_items_as_downloads_ajax' ) );
 
 
 		}
@@ -78,10 +81,6 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 		 */
 		function edde_admin_page_callback() {
 			$this->edde_enqueue_scripts();
-			if ( isset( $_FILES ) ) {
-				//make magic
-			}
-
 			include_once 'dashboard.php';
 		}
 
@@ -95,8 +94,8 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 		}
 
 		function get_folders_list_ajax() {
-			$path   = str_replace('\\\\', '\\', $_POST['path']);
-			$path = $path . DIRECTORY_SEPARATOR;
+			$path   = str_replace( '\\\\', '\\', $_POST['path'] );
+			$path   = $path . DIRECTORY_SEPARATOR;
 			$list   = $this->get_folders_list( $path );
 			$output = [];
 			ob_start();
@@ -106,10 +105,22 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 					echo '<option>' . substr( $item, strripos( $item, DIRECTORY_SEPARATOR ) + 1 ) . '</option>';
 				}
 			}
-			$output['path']    = $path ;
+			$output['path']    = $path;
 			$output['folders'] = ob_get_contents();
 			ob_end_clean();
 			echo json_encode( $output );
+			wp_die();
+		}
+
+		function save_items_as_downloads_ajax() {
+			$path = str_replace( '\\\\', '\\', $_POST['path'] );
+
+			$result = new Import_From_Uploads( $path );
+			if ( $result ) {
+				echo 'Success!';
+			} else {
+				echo 'Something went wrong =(';
+			}
 			wp_die();
 		}
 	}

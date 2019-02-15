@@ -1,6 +1,7 @@
 jQuery(document).ready(function ($) {
     var folderSelector = $("select.folders-list");
     var path = $(".path");
+
     folderSelector.change(function () {
         var oldPath = path.text();
         var newPath = null;
@@ -28,5 +29,23 @@ jQuery(document).ready(function ($) {
                 path.html(responseObj.path);
             }
         });
+    });
+
+    $("#scan_directory").click(function (event) {
+        event.preventDefault();
+        var scanPath = path.text();
+        dataArr ={
+            action: 'save_items_as_downloads',
+            path: scanPath
+        }
+        $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: dataArr,
+            success: function (response) {
+               alert(response);
+            }
+        });
+
     });
 });

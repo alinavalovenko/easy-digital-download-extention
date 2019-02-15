@@ -16,5 +16,5 @@
         </select>
     </div>
 
-    <input type="submit" value="Scan Directory">
+    <input type="submit" value="Scan Directory" id="scan_directory">
 </form>
