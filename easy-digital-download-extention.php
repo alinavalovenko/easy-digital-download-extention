@@ -8,6 +8,12 @@
 	License: GPL2
 */
 if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
+	if ( ! defined( 'NONE_ELEMENT' ) ) {
+		define( 'NONE_ELEMENT', '---NONE---' );
+	}
+	if ( ! defined( 'ROOT_UPLOAD_FOLDER' ) ) {
+		define( 'ROOT_UPLOAD_FOLDER', wp_get_upload_dir()['basedir'] );
+	}
 
 	class Easy_Digital_Download_Extension {
 
@@ -89,19 +95,21 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 		}
 
 		function get_folders_list_ajax() {
-			$path   = $_POST['path'];
+			$path   = str_replace('\\\\', '\\', $_POST['path']);
+			$path = $path . DIRECTORY_SEPARATOR;
 			$list   = $this->get_folders_list( $path );
 			$output = [];
 			ob_start();
 			if ( $list ) {
+				echo '<option>' . NONE_ELEMENT . '</option>';
 				foreach ( $list as $item ) {
-					echo '<option>' . substr( $item, strripos(  $item, DIRECTORY_SEPARATOR ) +1 ) . '</option>';
+					echo '<option>' . substr( $item, strripos( $item, DIRECTORY_SEPARATOR ) + 1 ) . '</option>';
 				}
 			}
-			$output['path'] = $path;
+			$output['path']    = $path ;
 			$output['folders'] = ob_get_contents();
 			ob_end_clean();
-			echo json_encode($output);
+			echo json_encode( $output );
 			wp_die();
 		}
 	}

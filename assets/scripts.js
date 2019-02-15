@@ -7,7 +7,7 @@ jQuery(document).ready(function ($) {
         if (oldPath === "") {
             newPath = this.value;
         } else {
-            newPath = oldPath + "/" + this.value;
+            newPath = oldPath + this.value;
         }
         var dataArr = {
             action: "get_folders_list",
@@ -20,7 +20,7 @@ jQuery(document).ready(function ($) {
             success: function (response) {
                 var responseObj = JSON.parse(response);
                 folderSelector[0].options.length = 0;
-                if (responseObj.folders !== '') {
+                if (responseObj.folders !== "") {
                     folderSelector.append(responseObj.folders);
                 } else {
                     folderSelector.hide();
