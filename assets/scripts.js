@@ -62,8 +62,8 @@ jQuery(document).ready(function ($) {
                     folderSelector.hide();
                 }
                 if(responseObj.files !== ""){
-                    $(".available-files").html(responseObj.files);
                     $(".available-files").show();
+                    $(".available-files").html(responseObj.files);
                 } else{
                     $(".available-files").hide();
                 }
