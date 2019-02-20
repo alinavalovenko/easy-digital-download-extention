@@ -15,7 +15,17 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 		define( 'ROOT_UPLOAD_FOLDER', wp_get_upload_dir()['basedir'] );
 	}
 
+	if ( ! defined( 'EDDE_DASHBOARD' ) ) {
+		define( 'EDDE_DASHBOARD', plugin_dir_path( __FILE__ ) . DIRECTORY_SEPARATOR .'dashboard.php' );
+	}
+
+	if ( ! defined( 'EDDE_DIR_URL' ) ) {
+		define( 'EDDE_DIR_URL', plugin_dir_url( __FILE__ ));
+	}
+
 	include_once 'include/class-import-from-uploads.php';
+	include_once 'include/class-edde-admin.php';
+	include_once 'include/controller.php';
 
 	class Easy_Digital_Download_Extension {
 
@@ -23,12 +33,7 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 			register_activation_hook( plugin_basename( __FILE__ ), array( $this, 'edde_activate' ) );
 			register_deactivation_hook( plugin_basename( __FILE__ ), array( $this, 'edde_deactivate' ) );
 			register_uninstall_hook( plugin_basename( __FILE__ ), array( $this, 'edde_uninstall' ) );
-			add_action( 'admin_menu', array( $this, 'edde_add_admin_page' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'edde_enqueue_scripts' ) );
-			add_action( 'wp_ajax_get_folders_list', array( $this, 'get_folders_list_ajax' ) );
-			add_action( 'wp_ajax_save_items_as_downloads', array( $this, 'save_items_as_downloads_ajax' ) );
-
-
+			$page = new EddE_Admin();
 		}
 
 		/****
@@ -52,77 +57,7 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 			return true;
 		}
 
-		/***
-		 * Create dashboard for plugin
-		 */
-		public function edde_add_admin_page() {
-			if ( function_exists( 'is_plugin_active' ) ) {
-				if ( ! is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) ) {
-					return;
-				}
-				add_submenu_page( 'edit.php?post_type=download', 'Easy Digital Download Extension', 'ED Download Extension', 'manage_options', 'edde_options', array(
-					$this,
-					'edde_admin_page_callback'
-				) );
-			}
-		}
 
-		/***
-		 * Enqueue scripts
-		 */
-		function edde_enqueue_scripts() {
-			wp_enqueue_style( 'edde-style', plugin_dir_url( __FILE__ ) . 'assets/styles.css' );
-			wp_enqueue_script( 'edde-jquery', 'https://code.jquery.com/jquery-3.3.1.min.js', '', '1.0.0', true );
-			wp_enqueue_script( 'edde-scripts', plugin_dir_url( __FILE__ ) . 'assets/scripts.js', array( 'edde-jquery' ), '1.0.0', true );
-		}
-
-		/***
-		 * Dashboard Callback Function
-		 */
-		function edde_admin_page_callback() {
-			$this->edde_enqueue_scripts();
-			include_once 'dashboard.php';
-		}
-
-		public function get_folders_list( $path = null ) {
-			if ( empty( $path ) ) {
-				$path = get_home_path();
-			}
-			$folders = glob( $path . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR );
-
-			return $folders;
-		}
-
-		function get_folders_list_ajax() {
-			$path   = str_replace( '\\\\', '\\', $_POST['path'] );
-			$path   = $path . DIRECTORY_SEPARATOR;
-			$list   = $this->get_folders_list( $path );
-			$output = [];
-			ob_start();
-			if ( $list ) {
-				echo '<option>' . NONE_ELEMENT . '</option>';
-				foreach ( $list as $item ) {
-					echo '<option>' . substr( $item, strripos( $item, DIRECTORY_SEPARATOR ) + 1 ) . '</option>';
-				}
-			}
-			$output['path']    = $path;
-			$output['folders'] = ob_get_contents();
-			ob_end_clean();
-			echo json_encode( $output );
-			wp_die();
-		}
-
-		function save_items_as_downloads_ajax() {
-			$path = str_replace( '\\\\', '\\', $_POST['path'] );
-
-			$result = new Import_From_Uploads( $path );
-			if ( $result ) {
-				echo 'Success!';
-			} else {
-				echo 'Something went wrong =(';
-			}
-			wp_die();
-		}
 	}
 
 	new Easy_Digital_Download_Extension();
