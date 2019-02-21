@@ -17,3 +17,15 @@
     background-color: #f25c5c;
     border-radius: 5px;
 }
+
+.scan-directory-btn{
+    background: #0073aa;
+    color: #fff;
+    padding: 10px 15px;
+    margin: 15px auto;
+    box-sizing: border-box;
+    opacity: 1;
+}
+.scan-directory-btn:hover{
+    opacity: 0.5;
+}
