@@ -1,6 +1,9 @@
 .folders {
     margin: 25px auto;
     display: inline-block;
+    border: dotted 1px #4b4b4b;
+    padding: 50px;
+    background-color: white;
 }
 .clear-path {
     display: none;
@@ -9,4 +12,8 @@
     height: 100%;
     margin-left: 15px;
     color: #fff;
+}
+.clear-path:hover {
+    background-color: #f25c5c;
+    border-radius: 5px;
 }

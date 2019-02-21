@@ -18,7 +18,7 @@ jQuery(document).ready(function ($) {
         event.preventDefault();
         var scanPath = path.text();
         var selectedFiles = $('input[name="files-to-upload[]"]:checked').serializeArray();
-        var dataArr ={
+        var dataArr = {
             action: 'save_items_as_downloads',
             path: scanPath,
             selected_files: selectedFiles
@@ -28,18 +28,22 @@ jQuery(document).ready(function ($) {
             url: ajaxurl,
             data: dataArr,
             success: function (response) {
-               alert(response);
-               location.reload();
+                alert(response);
+                location.reload();
             }
         });
 
     });
 
     clearPath.click(function () {
-        var tempPath = path.text().substring(0, path.text().length -1);
-        var position = tempPath.lastIndexOf("\\");
-        var prevPath =  tempPath.substring(0, position);
-        get_available_directorie(prevPath);
+        if (path.text() !== eddeInfo.basePath) {
+            var tempPath = path.text().substring(0, path.text().length - 1);
+            var position = tempPath.lastIndexOf(eddeInfo.directorySeparator);
+            var prevPath = tempPath.substring(0, position);
+            get_available_directorie(prevPath);
+        } else {
+            clearPath.hide();
+        }
     });
 
     function get_available_directorie(newPath) {
@@ -52,7 +56,6 @@ jQuery(document).ready(function ($) {
             url: ajaxurl,
             data: dataArr,
             success: function (response) {
-                clearPath.css("display", "inline-block");
                 var responseObj = JSON.parse(response);
                 folderSelector[0].options.length = 0;
                 if (responseObj.folders !== "") {
@@ -61,15 +64,25 @@ jQuery(document).ready(function ($) {
                 } else {
                     folderSelector.hide();
                 }
-                if(responseObj.files !== ""){
+                if (responseObj.files !== "") {
                     $(".available-files").show();
                     $(".available-files").html(responseObj.files);
-                } else{
+                } else {
                     $(".available-files").hide();
                 }
                 path.html(responseObj.path);
+                clearBtnUpdateVisibility();
             }
         });
+
+    }
+
+    function clearBtnUpdateVisibility() {
+        if (path.text() !== eddeInfo.basePath) {
+            clearPath.show();
+        } else {
+            clearPath.hide();
+        }
     }
 });
 

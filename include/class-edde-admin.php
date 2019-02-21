@@ -3,7 +3,7 @@
 class EddE_Admin {
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'edde_add_admin_page' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'edde_enqueue_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'edde_enqueue_scripts' ), 99 );
 		add_action( 'wp_ajax_get_folders_list', array( $this, 'get_folders_list_ajax' ) );
 		add_action( 'wp_ajax_save_items_as_downloads', array( $this, 'save_items_as_downloads_ajax' ) );
 	}
@@ -28,8 +28,13 @@ class EddE_Admin {
 	 */
 	function edde_enqueue_scripts() {
 		wp_enqueue_style( 'edde-style', EDDE_DIR_URL . 'assets/styles.css' );
-		wp_enqueue_script( 'edde-jquery', 'https://code.jquery.com/jquery-3.3.1.min.js', '', '1.0.0', true );
-		wp_enqueue_script( 'edde-scripts', EDDE_DIR_URL . 'assets/scripts.js', array( 'edde-jquery' ), '1.0.0', true );
+		wp_enqueue_script( 'jquery', 'https://code.jquery.com/jquery-3.3.1.min.js', '', '1.0.0', true );
+		wp_enqueue_script( 'edde-scripts', EDDE_DIR_URL . 'assets/scripts.js', array( 'jquery' ), '1.0.0', true );
+
+		wp_localize_script( 'edde-scripts', 'eddeInfo', array(
+			'directorySeparator' => DIRECTORY_SEPARATOR,
+			'basePath' => ROOT_UPLOAD_FOLDER . DIRECTORY_SEPARATOR
+		) );
 	}
 
 	/***
@@ -40,6 +45,13 @@ class EddE_Admin {
 		include_once EDDE_DASHBOARD;
 	}
 
+	/***
+	 * Get list of all available folders by path
+	 *
+	 * @param null $path
+	 *
+	 * @return array|false
+	 */
 	public function get_folders_list( $path = null ) {
 		if ( empty( $path ) ) {
 			$path = get_home_path();
@@ -49,8 +61,12 @@ class EddE_Admin {
 		return $folders;
 	}
 
+
+	/***
+	 * Display folder content by path
+	 */
 	function get_folders_list_ajax() {
-		$path              = str_replace( '\\\\', '\\', $_POST['path'] );
+		$path              = str_replace( '\\\\', DIRECTORY_SEPARATOR, $_POST['path'] );
 		$path              = $path . DIRECTORY_SEPARATOR;
 		$list              = $this->get_folders_list( $path );
 		$output            = [];
@@ -73,6 +89,9 @@ class EddE_Admin {
 		wp_die();
 	}
 
+	/***
+	 * Convert selected files to downloads post type
+	 */
 	function save_items_as_downloads_ajax() {
 		$path = str_replace( '\\\\', '\\', $_POST['path'] );
 		if ( isset( $_POST['selected_files'] ) ) {
@@ -90,6 +109,13 @@ class EddE_Admin {
 		wp_die();
 	}
 
+	/***
+	 * Convert files post data to array
+	 *
+	 * @param $post_data
+	 *
+	 * @return array
+	 */
 	function edde_selected_files_to_array( $post_data ) {
 		$files_name = [];
 		if (!empty($post_data) ){

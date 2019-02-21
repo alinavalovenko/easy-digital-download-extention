@@ -16,11 +16,11 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 	}
 
 	if ( ! defined( 'EDDE_DASHBOARD' ) ) {
-		define( 'EDDE_DASHBOARD', plugin_dir_path( __FILE__ ) . DIRECTORY_SEPARATOR .'dashboard.php' );
+		define( 'EDDE_DASHBOARD', plugin_dir_path( __FILE__ ) . DIRECTORY_SEPARATOR . 'dashboard.php' );
 	}
 
 	if ( ! defined( 'EDDE_DIR_URL' ) ) {
-		define( 'EDDE_DIR_URL', plugin_dir_url( __FILE__ ));
+		define( 'EDDE_DIR_URL', plugin_dir_url( __FILE__ ) );
 	}
 
 	include_once 'include/class-import-from-uploads.php';
@@ -30,34 +30,8 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 	class Easy_Digital_Download_Extension {
 
 		public function __construct() {
-			register_activation_hook( plugin_basename( __FILE__ ), array( $this, 'edde_activate' ) );
-			register_deactivation_hook( plugin_basename( __FILE__ ), array( $this, 'edde_deactivate' ) );
-			register_uninstall_hook( plugin_basename( __FILE__ ), array( $this, 'edde_uninstall' ) );
 			$page = new EddE_Admin();
 		}
-
-		/****
-		 * Activation hook callback
-		 */
-		public function edde_activate() {
-			return true;
-		}
-
-		/****
-		 * Deactivation hook callback
-		 */
-		public function edde_deactivate() {
-			return true;
-		}
-
-		/****
-		 * Uninstall hook callback
-		 */
-		public function edde_uninstall() {
-			return true;
-		}
-
-
 	}
 
 	new Easy_Digital_Download_Extension();
