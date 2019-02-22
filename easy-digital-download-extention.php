@@ -16,7 +16,7 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 	}
 
 	if ( ! defined( 'EDDE_DASHBOARD' ) ) {
-		define( 'EDDE_DASHBOARD', plugin_dir_path( __FILE__ ) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'dashboard-import-page.php' );
+		define( 'EDDE_DASHBOARD', plugin_dir_path( __FILE__ ) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'dashboard.php' );
 	}
 
 	if ( ! defined( 'EDDE_DIR_URL' ) ) {
