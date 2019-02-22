@@ -1,7 +1,7 @@
 <?php
 /*
-	Plugin Name: Easy Digital Download Extension
-	Description: Scan chosen directory and create download ctp
+	Plugin Name: TBR Simulator Manager
+	Description: Create 'download' Custom post type from files were uploaded by ftp
 	Version: 1.0
 	Author: Alina Valovenko
 	Author URI: http://www.valovenko.pro
