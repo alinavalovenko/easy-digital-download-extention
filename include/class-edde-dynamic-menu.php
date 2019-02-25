@@ -36,15 +36,18 @@ if ( ! class_exists( 'EddE_Dynamic_Menu' ) ) {
 					case 'customer':
 						$edd_settings     = get_option( 'edd_settings' );
 						$purchase_page_id = $edd_settings['purchase_history_page'];
-						$items            .= '<li id="edde-my-purchases"><a href="' . get_the_permalink( $purchase_page_id ) . '">' . get_the_title( $purchase_page_id ) . '</a>' . do_shortcode( "[download_history]" ) . '</li>';
-						$items            .= '<li id="edde-logout"><a href="' . wp_logout_url() . '">' . esc_html__( 'Logout' ) . '</a></li>';
 						$items            .= '<li><a href="' . get_post_type_archive_link("downloads").'">'. esc_html__('Downloads').'</a>';
 						$items            .= '<div class="col-6">' . $this->daily_selection_list_render() . '</div>';
 						$items            .= '<div class="col-6">' . $this->weekly_selection_list_render(). '</div>';
 						$items            .= '</li>';
+						$items            .= '<li id="edde-my-purchases"><a href="' . get_the_permalink( $purchase_page_id ) . '">' . get_the_title( $purchase_page_id ) . '</a>' . do_shortcode( "[download_history]" ) . '</li>';
+						$items            .= '<li id="edde-logout"><a href="' . wp_logout_url() . '">' . esc_html__( 'Logout' ) . '</a></li>';
 						break;
 					case 'guest':
-						$items .= '<li>' . 'guest' . '</li>';
+						$items            .= '<li><a href="' . get_post_type_archive_link("downloads").'">'. esc_html__('Downloads').'</a>';
+						$items            .= '<div class="col-6">' . $this->daily_selection_list_render() . '</div>';
+						$items            .= '<div class="col-6">' . $this->weekly_selection_list_render(). '</div>';
+						$items            .= '</li>';
 						$items .= '<li id="edde-logout"><a href="' . wp_logout_url() . '">' . esc_html__( 'Logout' ) . '</a></li>';
 						break;
 					case 'unknown':
