@@ -61,7 +61,11 @@ if ( ! class_exists( 'EddE_Dynamic_Menu' ) ) {
 			return $items;
 		}
 
-
+		/***
+		 * define current users status
+		 *
+		 * @return string
+		 */
 		function get_user_status() {
 			$status  = 'unknown';
 			$user_id = get_current_user_id();
@@ -77,10 +81,11 @@ if ( ! class_exists( 'EddE_Dynamic_Menu' ) ) {
 			return $status;
 		}
 
-		function selection_menu_list_render() {
-
-		}
-
+		/***
+		 * List of links for a daily archive pages
+		 *
+		 * @return string
+		 */
 		function weekly_selection_list_render() {
 			$args = array(
 				'type'            => 'daily',
@@ -105,6 +110,11 @@ if ( ! class_exists( 'EddE_Dynamic_Menu' ) ) {
 			return $item;
 		}
 
+		/***
+		 * List of downloads actual for today
+		 *
+		 * @return string
+		 */
 		function daily_selection_list_render() {
 			$args       = array(
 				'type'            => 'daily',
