@@ -1,4 +1,7 @@
 <?php
+include_once 'class-import-from-uploads.php';
+include_once 'class-edde-admin.php';
+include_once 'class-edde-dynamic-menu.php';
 
 function get_all_available_files( $path ) {
 	$files_list = scandir( $path );

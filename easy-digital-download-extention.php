@@ -23,8 +23,6 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 		define( 'EDDE_DIR_URL', plugin_dir_url( __FILE__ ) );
 	}
 
-	include_once 'include/class-import-from-uploads.php';
-	include_once 'include/class-edde-admin.php';
 	include_once 'include/controller.php';
 
 	class Easy_Digital_Download_Extension {
