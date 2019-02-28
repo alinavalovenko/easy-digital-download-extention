@@ -56,6 +56,8 @@ if ( ! class_exists( 'Import_From_Uploads' ) ) {
 			$meta_value = array();
 			foreach ( $files_list as $item ) {
 				$file_name    = sanitize_file_name( $item );
+				$path = str_replace(ROOT_UPLOAD_FOLDER, ROOT_UPLOAD_FOLDER_URL, $path);
+				$path = str_replace('\\', '/', $path);
 				$file_path    = $path . $item;
 				$wp_filetype  = wp_check_filetype( $file_path, null );
 				$attachment   = array(

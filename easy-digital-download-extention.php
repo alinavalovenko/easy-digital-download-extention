@@ -15,6 +15,10 @@ if ( ! class_exists( 'Easy_Digital_Download_Extension' ) ) {
 		define( 'ROOT_UPLOAD_FOLDER', wp_get_upload_dir()['basedir'] );
 	}
 
+	if ( ! defined( 'ROOT_UPLOAD_FOLDER_URL' ) ) {
+		define( 'ROOT_UPLOAD_FOLDER_URL', wp_get_upload_dir()['baseurl'] );
+	}
+
 	if ( ! defined( 'EDDE_DASHBOARD' ) ) {
 		define( 'EDDE_DASHBOARD', plugin_dir_path( __FILE__ ) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'dashboard.php' );
 	}
