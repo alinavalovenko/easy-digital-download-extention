@@ -10,22 +10,21 @@ if ( ! class_exists( 'Import_From_Uploads' ) ) {
 			if ( ! $files_list ) {
 				$files_list = get_all_available_files( $path );
 			}
-			foreach ( $files_list as $item ) {
-				$new_download  = new EDD_Download;
-				$download_args = array(
-					'post_title'   => sanitize_file_name( $item ),
-					'post_content' => '',
-					'post_status'  => 'publish',
-					'price'        => '10'
-				);
-				$new_download->create( $download_args );
-				$item_id = $new_download->ID;
-				if ( ! $item_id ) {
-					die( 'Import wasn\'t success' );
-				} else {
-					$this->edde_ser_price( $item_id );
-					$this->edde_set_download_info( $item_id, $item, $path );
-				}
+			$title         = date( 'l - F j, Y' );
+			$new_download  = new EDD_Download;
+			$download_args = array(
+				'post_title'   => sanitize_file_name( $title ),
+				'post_content' => '',
+				'post_status'  => 'publish',
+				'price'        => '10'
+			);
+			$new_download->create( $download_args );
+			$item_id = $new_download->ID;
+			if ( ! $item_id ) {
+				die( 'Import wasn\'t success' );
+			} else {
+				$this->edde_ser_price( $item_id );
+				$this->edde_set_download_info( $item_id, $files_list, $path );
 			}
 
 			return true;
@@ -45,39 +44,39 @@ if ( ! class_exists( 'Import_From_Uploads' ) ) {
 
 
 		/***
-		 * Set up downloads item info
+		 * Set up downloads items info
 		 *
 		 * @param $id
-		 * @param $item
+		 * @param $files_list
 		 * @param $path
+		 *
 		 */
-		function edde_set_download_info( $id, $item, $path ) {
-			$meta_key    = 'edd_download_files';
-			$file_name   = sanitize_file_name( $item );
-			$file_path   = $path . $item;
-			$wp_filetype = wp_check_filetype( $file_path, null );
-
-			$attachment = array(
-				'post_mime_type' => $wp_filetype['type'],
-				'post_title'     => $file_name,
-				'post_content'   => '',
-				'post_status'    => 'inherit'
-			);
-
-			$attach_id = wp_insert_attachment( $attachment, $item );
-
-			$meta_value = array(
-				0 => array(
+		function edde_set_download_info( $id, $files_list, $path ) {
+			$meta_key   = 'edd_download_files';
+			$meta_value = array();
+			foreach ( $files_list as $item ) {
+				$file_name    = sanitize_file_name( $item );
+				$file_path    = $path . $item;
+				$wp_filetype  = wp_check_filetype( $file_path, null );
+				$attachment   = array(
+					'post_mime_type' => $wp_filetype['type'],
+					'post_title'     => $file_name,
+					'post_content'   => '',
+					'post_status'    => 'inherit'
+				);
+				$attach_id    = wp_insert_attachment( $attachment, $item );
+				$meta_value[] = array(
 					'index'          => '0',
 					'attachment_id'  => $attach_id,
 					'thumbnail_size' => 'medium',
 					'name'           => $file_name,
 					'file'           => $file_path,
 					'condition'      => 'all',
-				)
-			);
 
+				);
+			}
 			add_post_meta( $id, $meta_key, $meta_value );
+
 		}
 
 
