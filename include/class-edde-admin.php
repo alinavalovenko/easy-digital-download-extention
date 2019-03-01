@@ -94,13 +94,14 @@ class EddE_Admin {
 	 */
 	function save_items_as_downloads_ajax() {
 		$path = str_replace( '\\\\', '\\', $_POST['path'] );
+		$date = $_POST['selection_date'];
 		if ( isset( $_POST['selected_files'] ) ) {
 			$files = $this->edde_selected_files_to_array( $_POST['selected_files'] );
 		} else {
 			$files = false;
 		}
 
-		$result = new Import_From_Uploads( $path, $files );
+		$result = new Import_From_Uploads( $path, $files, $date);
 		if ( $result ) {
 			echo 'Success!';
 		} else {

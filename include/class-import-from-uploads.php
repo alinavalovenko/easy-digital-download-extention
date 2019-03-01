@@ -2,7 +2,12 @@
 if ( ! class_exists( 'Import_From_Uploads' ) ) {
 
 	class Import_From_Uploads {
-		public function __construct( $path = ROOT_UPLOAD_FOLDER, $files = false ) {
+		private $name;
+		private $date_format;
+
+		public function __construct( $path = ROOT_UPLOAD_FOLDER, $files = false, $date ) {
+			$this->date_format = get_option( 'date_format' );
+			$this->name = $this->edde_transform_date_to_name( $date );
 			$this->edde_create_downloads( $path, $files );
 		}
 
@@ -10,10 +15,10 @@ if ( ! class_exists( 'Import_From_Uploads' ) ) {
 			if ( ! $files_list ) {
 				$files_list = get_all_available_files( $path );
 			}
-			$title         = date( 'l - F j, Y' );
+			$title         = $this->name;
 			$new_download  = new EDD_Download;
 			$download_args = array(
-				'post_title'   => sanitize_file_name( $title ),
+				'post_title'   =>  $title,
 				'post_content' => '',
 				'post_status'  => 'publish',
 				'price'        => '10'
@@ -56,8 +61,8 @@ if ( ! class_exists( 'Import_From_Uploads' ) ) {
 			$meta_value = array();
 			foreach ( $files_list as $item ) {
 				$file_name    = sanitize_file_name( $item );
-				$path = str_replace(ROOT_UPLOAD_FOLDER, ROOT_UPLOAD_FOLDER_URL, $path);
-				$path = str_replace('\\', '/', $path);
+				$path         = str_replace( ROOT_UPLOAD_FOLDER, ROOT_UPLOAD_FOLDER_URL, $path );
+				$path         = str_replace( '\\', '/', $path );
 				$file_path    = $path . $item;
 				$wp_filetype  = wp_check_filetype( $file_path, null );
 				$attachment   = array(
@@ -79,6 +84,17 @@ if ( ! class_exists( 'Import_From_Uploads' ) ) {
 			}
 			add_post_meta( $id, $meta_key, $meta_value );
 
+		}
+
+		private function edde_transform_date_to_name( $str_date ) {
+			if ( isset( $str_date ) && ! empty( $str_date ) ) {
+				$date = strtotime( $str_date );
+				$date = date( $this->date_format , $date );
+			} else {
+				$date = date( $this->date_format  );
+			}
+
+			return $date;
 		}
 
 

@@ -18,10 +18,12 @@ jQuery(document).ready(function ($) {
         event.preventDefault();
         var scanPath = path.text();
         var selectedFiles = $('input[name="files-to-upload[]"]:checked').serializeArray();
+        var selectionDate = $("#date-of-selectin").val();
         var dataArr = {
             action: 'save_items_as_downloads',
             path: scanPath,
-            selected_files: selectedFiles
+            selected_files: selectedFiles,
+            selection_date: selectionDate
         };
         $.ajax({
             type: "POST",

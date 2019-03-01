@@ -16,12 +16,15 @@
 			<?php } ?>
         </select>
         <span class="clear-path"> < </span>
-    </div>
-	<?php $files = get_all_available_files( $path ); ?>
-    <div class="available-files">
-		<?php if ( $files ) {
-			echo edde_dispay_available_files( $files );
-		}
-		?>
+        <div class="date-option">
+            <label for="date-of-selectin">Choose a date of the selection <br/><input id="date-of-selectin" type="date"/></label>
+        </div>
+		<?php $files = get_all_available_files( $path ); ?>
+        <div class="available-files">
+			<?php if ( $files ) {
+				echo edde_dispay_available_files( $files );
+			}
+			?>
+        </div>
     </div>
 </form>

@@ -29,3 +29,11 @@
 .scan-directory-btn:hover{
     opacity: 0.5;
 }
+
+.date-option label{
+    font-weight: 600;
+}
+
+.date-option{
+    margin: 30px auto;
+}
