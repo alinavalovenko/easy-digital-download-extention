@@ -35,6 +35,7 @@ if ( ! class_exists( 'EddE_Dynamic_Menu' ) ) {
 		 * @param $args
 		 *
 		 * @return string
+		 * @throws Exception
 		 */
 		function edde_add_dynamic_section( $items, $args ) {
 			$user_status = $this->get_user_status();
@@ -53,7 +54,8 @@ if ( ! class_exists( 'EddE_Dynamic_Menu' ) ) {
 						$items .= '<li id="edde-logout"><a href="' . wp_logout_url() . '">' . esc_html__( 'Logout' ) . '</a></li>';
 						break;
 					case 'unknown':
-						$items .= '<li id="edde-login"><a href="' . wp_login_url() . '">' . esc_html__( 'Login' ) . '</a> / <a href="' . wp_registration_url() . '"> ' . esc_html__( 'Registration' ) . '</a></li>';
+						$items .= '<li id="edde-login"><a href="' . wp_login_url() . '">' . esc_html__( 'Login' ) . '</a></li>';
+						$items .= '<li id="edde-login"><a href="' . wp_registration_url() . '"> ' . esc_html__( 'Registration' ) . '</a></li>';
 						break;
 				}
 			} else {
