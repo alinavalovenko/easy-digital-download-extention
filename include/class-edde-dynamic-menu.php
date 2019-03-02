@@ -39,7 +39,7 @@ if ( ! class_exists( 'EddE_Dynamic_Menu' ) ) {
 		 */
 		function edde_add_dynamic_section( $items, $args ) {
 			$user_status = $this->get_user_status();
-			if ( "edd-dynamic-menu" === $args->theme_location || 'primary-menu' === $args->theme_location ) {
+			if ( "edde-dynamic-menu" === $args->theme_location || 'primary-menu' === $args->theme_location ) {
 				switch ( $user_status ) {
 					case 'customer':
 						$edd_settings = get_option( 'edd_settings' );
@@ -48,14 +48,14 @@ if ( ! class_exists( 'EddE_Dynamic_Menu' ) ) {
 						$items .= '<ul class="sub-menu">' . $this->selection_list_render();
 						$items .= $this->tomorrow_selection_list_render();
 						$items .= '</ul>' . '</li>';
-						$items .= '<li id="edde-logout"><a href="' . wp_logout_url() . '">' . esc_html__( 'Logout' ) . '</a></li>';
+						$items .= '<li id="edde-logout" class="menu-item menu"><a href="' . wp_logout_url() . '">' . esc_html__( 'Logout' ) . '</a></li>';
 						break;
 					case 'guest':
-						$items .= '<li id="edde-logout"><a href="' . wp_logout_url() . '">' . esc_html__( 'Logout' ) . '</a></li>';
+						$items .= '<li id="edde-logout" class="menu-item menu"><a href="' . wp_logout_url() . '">' . esc_html__( 'Logout' ) . '</a></li>';
 						break;
 					case 'unknown':
-						$items .= '<li id="edde-login"><a href="' . wp_login_url() . '">' . esc_html__( 'Login' ) . '</a></li>';
-						$items .= '<li id="edde-login"><a href="' . wp_registration_url() . '"> ' . esc_html__( 'Registration' ) . '</a></li>';
+						$items .= '<li id="edde-login" class="menu-item menu"><a href="' . wp_login_url() . '">' . esc_html__( 'Login' ) . '</a></li>';
+						$items .= '<li id="edde-login" class="menu-item menu"><a href="' . wp_registration_url() . '"> ' . esc_html__( 'Registration' ) . '</a></li>';
 						break;
 				}
 			} else {
